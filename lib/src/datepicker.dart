@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:persian_date/persian_date.dart';
+import 'persian_date.dart' as PD;
 
 typedef DateChangedCallback(int year, int month, int date);
 
@@ -385,18 +386,19 @@ class _DatePickerState extends State<_DatePickerComponent> {
                 child: Row(
                   children: <Widget>[
                     new Expanded(
-                        child: Text(
-                      (format == null)
-                          // index is 0,1,2...11  month is 1,2,3...12
-                          ? '${index + 1}$monthAppend'
-                          : '${_formatMonthComplex(index, format)}$monthAppend',
-                      style: TextStyle(
-                          color: Color(0xFF000046),
-                          fontSize: _kDatePickerFontSize),
-                      textAlign: TextAlign.center,
-                      softWrap: false,
-                      overflow: TextOverflow.fade,
-                    ))
+                      child: Text(
+                        (format == null)
+                            // index is 0,1,2...11  month is 1,2,3...12
+                            ? '${PD.PersianDate().monthLong[index]}$monthAppend'
+                            : '${_formatMonthComplex(index, format)}$monthAppend',
+                        style: TextStyle(
+                            color: Color(0xFF000046),
+                            fontSize: _kDatePickerFontSize),
+                        textAlign: TextAlign.center,
+                        softWrap: false,
+                        overflow: TextOverflow.fade,
+                      ),
+                    )
                   ],
                 ),
               );
@@ -530,16 +532,16 @@ class _DatePickerState extends State<_DatePickerComponent> {
   // format month
   String _formatMonthComplex(int month, String format) {
     if (widget.locale == null) {
-      return (month + 1).toString();
+      return PD.PersianDate().monthLong[month];
     }
 
     List<String> months = ["months"];
     if (months == null) {
-      return (month + 1).toString();
+      return PD.PersianDate().monthLong[month];
     }
 
     if (format.length <= 2) {
-      return (month + 1).toString();
+      return PD.PersianDate().monthLong[month];
     } else if (format.length <= 3) {
       return months[month].substring(0, 3);
     } else {
