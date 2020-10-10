@@ -29,6 +29,7 @@ class DatePicker {
     int initialDay,
     Widget cancel,
     Widget confirm,
+    TextDirection textDirection: TextDirection.rtl,
     DateChangedCallback onChanged,
     DateChangedCallback onConfirm,
     dateFormat: _kDateFormatDefault,
@@ -59,6 +60,7 @@ class DatePicker {
         initialDate: initialDay,
         cancel: cancel,
         confirm: confirm,
+        textDirection: textDirection,
         onChanged: onChanged,
         onConfirm: onConfirm,
         dateFormat: dateFormat,
@@ -80,6 +82,7 @@ class _DatePickerRoute<T> extends PopupRoute<T> {
     this.initialDate,
     this.cancel,
     this.confirm,
+    this.textDirection,
     this.onChanged,
     this.onConfirm,
     this.theme,
@@ -92,6 +95,7 @@ class _DatePickerRoute<T> extends PopupRoute<T> {
   final bool showTitleActions;
   final int minYear, maxYear, initialYear, initialMonth, initialDate;
   final Widget cancel, confirm;
+  final TextDirection textDirection;
   final DateChangedCallback onChanged;
   final DateChangedCallback onConfirm;
   final ThemeData theme;
@@ -134,6 +138,7 @@ class _DatePickerRoute<T> extends PopupRoute<T> {
         initialDate: initialDate,
         cancel: cancel,
         confirm: confirm,
+        textDirection: textDirection,
         onChanged: onChanged,
         locale: locale,
         dateFormat: dateFormat,
@@ -158,6 +163,7 @@ class _DatePickerComponent extends StatefulWidget {
       this.initialDate: 1,
       this.cancel,
       this.confirm,
+      this.textDirection,
       this.onChanged,
       this.locale,
       this.dateFormat});
@@ -167,6 +173,8 @@ class _DatePickerComponent extends StatefulWidget {
 
   final Widget cancel;
   final Widget confirm;
+
+  final TextDirection textDirection;
 
   final _DatePickerRoute route;
 
@@ -311,11 +319,14 @@ class _DatePickerState extends State<_DatePickerComponent> {
   Widget _renderPickerView() {
     Widget itemView = _renderItemView();
     if (widget.route.showTitleActions) {
-      return Column(
-        children: <Widget>[
-          _renderTitleActionsView(),
-          itemView,
-        ],
+      return Directionality(
+        textDirection: widget.textDirection,
+        child: Column(
+          children: <Widget>[
+            _renderTitleActionsView(),
+            itemView,
+          ],
+        ),
       );
     }
     return itemView;
